@@ -312,7 +312,7 @@ public class LoginFragment extends Fragment{
 		WifiManager wifiManager = (WifiManager)getActivity().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 
-		if(wifiInfo.getSSID()=="OC Wireless") {
+		if(wifiInfo.getSSID()=="OCS") {
 			return true;
 		}else{
 			return false;
