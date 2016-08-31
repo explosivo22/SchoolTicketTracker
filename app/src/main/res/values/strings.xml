@@ -32,7 +32,7 @@
     <string name="ip_address_preference_title">IP Address</string>
     <string name="ip_address_preference_summary">Set the IP address for on or off the network</string>
     <string name="settings_menu_title">Settings</string>
-    <string name="preference_display_category">Display</string>
+    <string name="preference_display_update">Auto Update</string>
     <string name="preference_theme_summary_on">Light text on a dark background</string>
     <string name="preference_theme_summary_off">Dark text on a light background</string>
     <string name="preference_theme_switch_on">On</string>

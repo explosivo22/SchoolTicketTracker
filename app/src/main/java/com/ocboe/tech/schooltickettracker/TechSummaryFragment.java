@@ -68,29 +68,18 @@ public class TechSummaryFragment  extends ListFragment {
 		
 		((TechSummaryActivity) getActivity()).setActionBarTitle("Total Orders: " + totalOrders);
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-	    MenuItem Settings = menu.add(0,1,0,R.string.settings_menu_title);
-	    Settings.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-	    SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(getActivity().getApplicationContext());
- 
-		boolean isLight = sharedPrefs.getBoolean("light_theme", false);
-		
-		if(isLight){
-			Settings.setIcon(R.drawable.ic_settings_white_48dp);
-		}else{
-			Settings.setIcon(R.drawable.ic_settings_black_48dp);
-		}
+		getActivity().getMenuInflater().inflate(R.menu.login_menu, menu);
 	    super.onCreateOptionsMenu(menu,inflater);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
-		case 1:
+		case R.id.menu_settings:
 			//change fragment to SettingsFragment
 			getFragmentManager().beginTransaction()
 				.replace(R.id.summaryListContainer, new SettingsFragment())

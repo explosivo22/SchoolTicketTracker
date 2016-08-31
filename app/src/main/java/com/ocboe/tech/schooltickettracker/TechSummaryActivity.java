@@ -57,14 +57,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 		SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-		boolean isLight = sharedPrefs.getBoolean("light_theme", false);
-
-		if(isLight){
-			setTheme(R.style.DarkTheme);
-		}else{
-			setTheme(R.style.LightTheme);
-		}
-
 		setContentView(R.layout.tech_summary);
 
 		mTitle = mDrawerTitle = getTitle();
