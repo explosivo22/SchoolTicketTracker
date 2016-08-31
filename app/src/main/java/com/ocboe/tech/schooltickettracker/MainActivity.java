@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = "SCHOOL_TICKET";
     private String msg = null;
     public static Context mContext;
+    private static WifiInfo wifiInfo;
+    private static WifiManager wifiManager;
 
     public static final String ACTION_SHOW_UPDATE_DIALOG = "show-update-dialog";
     public static boolean shouldShowUpdateDialog;
@@ -130,10 +132,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if(CheckWifi()){
-
             Properties.setIPAddress("10.99.0.26");
             DisplayIP.setText("IP: Internal");
-
         }else {
             Properties.setIPAddress("96.4.160.69");
             DisplayIP.setText("IP: External");
@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         //getActivity().getActionBar().setTitle("Login");
         //AppCompatActivity activity = (AppCompatActivity) getActivity();
+        wifiInfo = wifiManager.getConnectionInfo();
         getSupportActionBar().setTitle("Login");
         Properties.setPage("logonandroid.php");
     }
@@ -292,12 +293,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean CheckWifi(){
-        WifiManager wifiManager = (WifiManager)this.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        wifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+        wifiInfo = wifiManager.getConnectionInfo();
 
         if(wifiInfo.getSSID()=="OCS") {
+            Log.d(TAG, "CheckWifi: Connected to Internal Network");
             return true;
         }else{
+            Log.d(TAG, "CheckWifi: Connected to External Network");
             return false;
         }
     }
