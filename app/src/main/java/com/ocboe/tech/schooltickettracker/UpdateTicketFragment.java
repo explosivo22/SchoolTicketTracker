@@ -152,7 +152,7 @@ public class UpdateTicketFragment extends Fragment{
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
-		case 1:
+		case R.id.menu_settings:
 			//change fragment to SettingsFragment
 			getFragmentManager().beginTransaction()
 				.replace(R.id.summaryListContainer, new SettingsFragment())
