@@ -21,11 +21,8 @@ public class DownloadUpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("DownloadUpdateService", "onStartCommand: testing if intent is null");
 
         if (intent != null) {
-
-            Log.d("DownloadUpdateService", "onStartCommand: Starting Update");
 
             String downloadURL = intent.getStringExtra("downloadURL");
             String newApkFilePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + FILE_NAME;

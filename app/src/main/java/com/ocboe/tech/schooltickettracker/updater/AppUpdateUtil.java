@@ -86,12 +86,9 @@ public class AppUpdateUtil {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        Log.d("AppUpdateUtil", "onClick: Update Pressed");
                         Intent startDownloadIntent = new Intent(context, DownloadUpdateService.class);
                         startDownloadIntent.putExtra("downloadURL", update.getAssetUrl());
-                        Log.d("AppUpdateUtil", "onClick: getAssetURL:"+update.getAssetUrl());
                         context.startService(startDownloadIntent);
-                        Log.d("AppUpdateUtil", "onClick: trying to start downloadIntent");
                     }
                 })
                 .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
