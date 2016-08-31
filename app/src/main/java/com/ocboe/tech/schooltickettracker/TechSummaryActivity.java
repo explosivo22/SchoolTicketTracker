@@ -40,21 +40,12 @@ public class TechSummaryActivity extends ActionBarActivity {
 	public static Context mContext;
 	public static View mView;
 
-	public static final String ACTION_SHOW_UPDATE_DIALOG = "show-update-dialog";
-	public static boolean shouldShowUpdateDialog;
-
-	public static Intent createUpdateDialogIntent(AppUpdate update) {
-		Intent updateIntent = new Intent(LoginActivity.ACTION_SHOW_UPDATE_DIALOG);
-		updateIntent.putExtra("update", update);
-		return updateIntent;
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		shouldShowUpdateDialog = true;
 		mView = findViewById(android.R.id.content);
 		/*Fragment mFragment = new TechSummaryFragment();
 		
@@ -122,8 +113,6 @@ public class TechSummaryActivity extends ActionBarActivity {
         if (savedInstanceState == null) {
             selectItem(0);
         }
-
-		LocalBroadcastManager.getInstance(this).registerReceiver(showUpdateDialog, new IntentFilter(ACTION_SHOW_UPDATE_DIALOG));
 
 	}
 
@@ -269,36 +258,8 @@ public class TechSummaryActivity extends ActionBarActivity {
 		getSupportActionBar().setTitle(title);
 	}
 
-	private final BroadcastReceiver showUpdateDialog = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			AppUpdate update = intent.getParcelableExtra("update");
-			if (update.getStatus() == AppUpdate.UPDATE_AVAILABLE && shouldShowUpdateDialog && !isSchoolTicketTrackerBeingUpdated(context)) {
-				AlertDialog updateDialog = AppUpdateUtil.getAppUpdateDialog(mContext, update);
-				updateDialog.show();
-			}
-			if (!shouldShowUpdateDialog)
-				shouldShowUpdateDialog = true;
-		}
-	};
-
-	public static boolean isSchoolTicketTrackerBeingUpdated(Context context) {
-
-		DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-		DownloadManager.Query q = new DownloadManager.Query();
-		q.setFilterByStatus(DownloadManager.STATUS_RUNNING);
-		Cursor c = downloadManager.query(q);
-		if (c.moveToFirst()) {
-			String fileName = c.getString(c.getColumnIndex(DownloadManager.COLUMN_TITLE));
-			if (fileName.equals(DownloadUpdateService.DOWNLOAD_UPDATE_TITLE))
-				return true;
-		}
-		return false;
-	}
-
 	@Override
 	public void onDestroy() {
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(showUpdateDialog);
 		super.onDestroy();
 	}
 

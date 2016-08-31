@@ -26,10 +26,10 @@ public class SettingsFragment extends PreferenceFragment{
             checkForUpdatePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    if (!TechSummaryActivity.isSchoolTicketTrackerBeingUpdated(getActivity())) {
+                    if (!MainActivity.isSchoolTicketTrackerBeingUpdated(getActivity())) {
                         Snackbar.make(TechSummaryActivity.mView, getResources().getString(R.string.checking_for_update), Snackbar.LENGTH_SHORT).show();
                         //Toast.makeText(getActivity(), getResources().getString(R.string.checking_for_update), Toast.LENGTH_SHORT).show();
-                        TechSummaryActivity.shouldShowUpdateDialog = false;
+                        MainActivity.shouldShowUpdateDialog = false;
                         AppUpdateUtil.checkForUpdate(getActivity());
                     } else
                         Snackbar.make(TechSummaryActivity.mView, getResources().getString(R.string.ongoing_update), Snackbar.LENGTH_SHORT).show();

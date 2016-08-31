@@ -10,18 +10,22 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
+import android.util.Log;
 
 import java.io.File;
 
 public class DownloadUpdateService extends Service {
 
-    private static final String FILE_NAME = "GoIV_new.apk";
-    public static final String DOWNLOAD_UPDATE_TITLE = "Updating GoIV";
+    private static final String FILE_NAME = "SchoolTicketTracker_new.apk";
+    public static final String DOWNLOAD_UPDATE_TITLE = "Updating School Ticket Tracker";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("DownloadUpdateService", "onStartCommand: testing if intent is null");
 
         if (intent != null) {
+
+            Log.d("DownloadUpdateService", "onStartCommand: Starting Update");
 
             String downloadURL = intent.getStringExtra("downloadURL");
             String newApkFilePath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) + "/" + FILE_NAME;

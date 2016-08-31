@@ -8,8 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.ocboe.tech.schooltickettracker.BuildConfig;
-import com.ocboe.tech.schooltickettracker.LoginActivity;
-import com.ocboe.tech.schooltickettracker.LoginFragment;
+import com.ocboe.tech.schooltickettracker.MainActivity;
 import com.ocboe.tech.schooltickettracker.R;
 
 import org.json.JSONException;
@@ -46,7 +45,7 @@ public class AppUpdateUtil {
             @Override
             public void onFailure(Call call, IOException e) {
                 AppUpdate update = new AppUpdate(null, null, null, AppUpdate.ERROR);
-                Intent updateIntent = LoginActivity.createUpdateDialogIntent(update);
+                Intent updateIntent = MainActivity.createUpdateDialogIntent(update);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(updateIntent);
             }
 
@@ -69,7 +68,7 @@ public class AppUpdateUtil {
                     if (currentVersion.compareTo(remoteVersion) < 0)
                         update.setStatus(AppUpdate.UPDATE_AVAILABLE);
 
-                    Intent updateIntent = LoginActivity.createUpdateDialogIntent(update);
+                    Intent updateIntent = MainActivity.createUpdateDialogIntent(update);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(updateIntent);
                 } catch (JSONException je) {
 
@@ -87,9 +86,12 @@ public class AppUpdateUtil {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
+                        Log.d("AppUpdateUtil", "onClick: Update Pressed");
                         Intent startDownloadIntent = new Intent(context, DownloadUpdateService.class);
                         startDownloadIntent.putExtra("downloadURL", update.getAssetUrl());
+                        Log.d("AppUpdateUtil", "onClick: getAssetURL:"+update.getAssetUrl());
                         context.startService(startDownloadIntent);
+                        Log.d("AppUpdateUtil", "onClick: trying to start downloadIntent");
                     }
                 })
                 .setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
