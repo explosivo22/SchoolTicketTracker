@@ -106,14 +106,21 @@ public class TechSummaryActivity extends ActionBarActivity {
 
 
 					//Replacing the main content with ContentFragment Which is our Inbox View;
-					case R.id.inbox:
-						Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+					case R.id.techsummary:
+						Toast.makeText(getApplicationContext(),"TechSummary Selected",Toast.LENGTH_SHORT).show();
 						return true;
 
 					// For rest of the options we just show a toast on click
 
-					case R.id.starred:
-						Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+					case R.id.dispose:
+						Toast.makeText(getApplicationContext(),"Dispose Selected",Toast.LENGTH_SHORT).show();
+						return true;
+
+					case R.id.inventory:
+						Toast.makeText(getApplicationContext(),"Inventory Selected",Toast.LENGTH_SHORT).show();
+						return true;
+					case R.id.settings:
+						Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
 						return true;
 					default:
 						return true;
@@ -165,7 +172,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 	private void setUpNavDrawer() {
 		if (tb != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			tb.setNavigationIcon(R.drawable.ic_drawer);
+			tb.setNavigationIcon(R.drawable.ic_menu_black_24dp);
 			tb.setNavigationOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {

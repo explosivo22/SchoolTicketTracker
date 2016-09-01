@@ -112,14 +112,21 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.inbox:
-                        Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+                    case R.id.techsummary:
+                        Toast.makeText(getApplicationContext(),"TechSummary Selected",Toast.LENGTH_SHORT).show();
                         return true;
 
                     // For rest of the options we just show a toast on click
 
-                    case R.id.starred:
-                        Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+                    case R.id.dispose:
+                        Toast.makeText(getApplicationContext(),"Dispose Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    case R.id.inventory:
+                        Toast.makeText(getApplicationContext(),"Inventory Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.settings:
+                        Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return true;
@@ -200,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.icon);
-        //ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override

@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/group_activities" android:checkableBehavior="single">
 
         <item
-            android:id="@+id/inbox"
+            android:id="@+id/techsummary"
             android:checked="false"
-            android:icon="@android:drawable/ic_menu_preferences"
-            android:title="@string/preferences" />
+            android:icon="@drawable/ic_receipt_black_48dp"
+            android:title="@string/techsummary" />
 
         <item
-            android:id="@+id/starred"
+            android:id="@+id/dispose"
             android:checked="false"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="@string/starred_string" />
+            android:icon="@drawable/ic_delete_black_48dp"
+            android:title="@string/dispose" />
+
+        <item
+            android:id="@+id/inventory"
+            android:checked="false"
+            android:icon="@drawable/ic_assignment_black_48dp"
+            android:title="@string/inventory" />
+    </group>
+    <group
+        android:id="@+id/group_settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settings"
+            android:checked="false"
+            android:icon="@drawable/ic_settings_black_48dp"
+            android:title="@string/settings" />
 
     </group>
 </menu>
