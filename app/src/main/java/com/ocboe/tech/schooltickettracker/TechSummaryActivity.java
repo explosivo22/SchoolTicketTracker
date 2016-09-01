@@ -12,22 +12,30 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ocboe.tech.schooltickettracker.updater.AppUpdate;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdateUtil;
 import com.ocboe.tech.schooltickettracker.updater.DownloadUpdateService;
+
+import org.w3c.dom.Text;
 
 public class TechSummaryActivity extends ActionBarActivity {
 
@@ -39,6 +47,11 @@ public class TechSummaryActivity extends ActionBarActivity {
     private CharSequence mTitle;
 	public static Context mContext;
 	public static View mView;
+	private NavigationView navigationView;
+	private DrawerLayout drawerLayout;
+	private Toolbar tb;
+	private FragmentManager fm;
+	private TextView header_user_name, header_email;
 
 
 	@Override
@@ -59,53 +72,71 @@ public class TechSummaryActivity extends ActionBarActivity {
 
 		setContentView(R.layout.tech_summary);
 
-		mTitle = mDrawerTitle = getTitle();
-		mDrawerItems = getResources().getStringArray(R.array.drawer_list);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		fm = getFragmentManager();
 
-		// set a custom shadow that overlays the main content when the drawer opens
-        //mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerItems));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		setToolBar();
+		setUpNavDrawer();
 
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		navigationView = (NavigationView) findViewById(R.id.navigation);
 
-		setSupportActionBar(toolbar);
-		getSupportActionBar().setDisplayShowHomeEnabled(true);
-		//getSupportActionBar().setDisplayUseLogoEnabled(true);
+		View header = navigationView.getHeaderView(0);
+		header_user_name = (TextView)header.findViewById(R.id.header_username);
+		header_email = (TextView)header.findViewById(R.id.header_email);
 
-		// enable ActionBar app icon to behave as action to toggle nav drawer
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeButtonEnabled(true);
+		SetHeader();
 
-     // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                toolbar,  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-                ) {
-            public void onDrawerClosed(View view) {
-				super.onDrawerClosed(view);
-                //getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
 
-            public void onDrawerOpened(View drawerView) {
-				super.onDrawerOpened(drawerView);
-                //getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+		//Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+		navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
-        if (savedInstanceState == null) {
-            selectItem(0);
-        }
+			// This method will trigger on item Click of navigation menu
+			@Override
+			public boolean onNavigationItemSelected(MenuItem menuItem) {
 
+
+				//Checking if the item is in checked state or not, if not make it in checked state
+				if(menuItem.isChecked()) menuItem.setChecked(false);
+				else menuItem.setChecked(true);
+
+				//Closing drawer on item click
+				drawerLayout.closeDrawers();
+
+				//Check to see which item was being clicked and perform appropriate action
+				switch (menuItem.getItemId()){
+
+
+					//Replacing the main content with ContentFragment Which is our Inbox View;
+					case R.id.inbox:
+						Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+						return true;
+
+					// For rest of the options we just show a toast on click
+
+					case R.id.starred:
+						Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+						return true;
+					default:
+						return true;
+				}
+			}
+		});
+
+		// Initializing Drawer Layout and ActionBarToggle
+		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+		Fragment fragment = new TechSummaryFragment();
+
+		fm.beginTransaction()
+				.replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
+				//.addToBackStack(null)
+				.commit();
+
+	}
+
+	private void SetHeader() {
+
+		header_user_name.setText(Properties.getName());
+		header_email.setText(Properties.getEmail());
 	}
 
 	public void onBackPressed() {
@@ -123,42 +154,29 @@ public class TechSummaryActivity extends ActionBarActivity {
 		}
 	}
 
-	@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-         // The action bar home/up action should open or close the drawer.
-         // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	private void setToolBar() {
+		tb = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(tb);
+		ActionBar ab = getSupportActionBar();
+		ab.setHomeAsUpIndicator(R.drawable.icon);
+		//ab.setDisplayHomeAsUpEnabled(true);
+	}
 
-	/**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-	    @Override
-	    public void onItemClick(AdapterView parent, View view, int position, long id) {
-	        selectItem(position);
-	    	// update selected item and title, then close the drawer
-	        //mDrawerList.setItemChecked(position, true);
-	        //setTitle(mPlanetTitles[position]);
-	        //mDrawerLayout.closeDrawer(mDrawerList);
-	    }
+	private void setUpNavDrawer() {
+		if (tb != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			tb.setNavigationIcon(R.drawable.ic_drawer);
+			tb.setNavigationOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					drawerLayout.openDrawer(GravityCompat.START);
+				}
+			});
+		}
 	}
 
 	private void selectItem(int position) {
         // update the main content by replacing fragments
-		FragmentManager fm = getFragmentManager();
 
 		switch(position){
 		case 0:
@@ -178,11 +196,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 			if(fm.findFragmentByTag("DisposeEquipment") != null){
 				fm.popBackStack("DisposeEquipment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 			}
-
-	        // update selected item and title, then close the drawer
-	        mDrawerList.setItemChecked(position, true);
-	        //setTitle(mPlanetTitles[position]);
-	        mDrawerLayout.closeDrawer(mDrawerList);
 	        break;
 		case 1:
 			if(fm.findFragmentByTag("techsummaryfragment") != null){
@@ -199,10 +212,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 				.addToBackStack("DisposeEquipment")
 				.commit();
 			}
-			// update selected item and title, then close the drawer
-	        mDrawerList.setItemChecked(position, true);
-	        //setTitle(mPlanetTitles[position]);
-	        mDrawerLayout.closeDrawer(mDrawerList);
 
 			break;
 		case 2:
@@ -220,10 +229,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 				.addToBackStack("InventorySearch")
 				.commit();
 			}
-			// update selected item and title, then close the drawer
-	        mDrawerList.setItemChecked(position, true);
-	        //setTitle(mPlanetTitles[position]);
-	        mDrawerLayout.closeDrawer(mDrawerList);
 
 			break;
 		case 3:
@@ -236,12 +241,8 @@ public class TechSummaryActivity extends ActionBarActivity {
 		        .replace(R.id.summaryListContainer, Settings)
 		        .commit();
 
-	        // update selected item and title, then close the drawer
-	        mDrawerList.setItemChecked(position, true);
-	        //setTitle(mPlanetTitles[position]);
-	        mDrawerLayout.closeDrawer(mDrawerList);
 	        break;
-	    default:
+			default:
 	    	break;
 		}
     }

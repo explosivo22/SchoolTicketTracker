@@ -17,13 +17,18 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -65,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     private static WifiInfo wifiInfo;
     private static WifiManager wifiManager;
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private Toolbar tb;
 
     public static final String ACTION_SHOW_UPDATE_DIALOG = "show-update-dialog";
     public static boolean shouldShowUpdateDialog;
@@ -81,6 +89,47 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setToolBar();
         getSupportActionBar().setTitle("Login");
+
+        navigationView = (NavigationView) findViewById(R.id.navigation);
+
+        //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            // This method will trigger on item Click of navigation menu
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+
+
+                //Checking if the item is in checked state or not, if not make it in checked state
+                if(menuItem.isChecked()) menuItem.setChecked(false);
+                else menuItem.setChecked(true);
+
+                //Closing drawer on item click
+                drawerLayout.closeDrawers();
+
+                //Check to see which item was being clicked and perform appropriate action
+                switch (menuItem.getItemId()){
+
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.inbox:
+                        Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    // For rest of the options we just show a toast on click
+
+                    case R.id.starred:
+                        Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return true;
+                }
+            }
+        });
+
+        // Initializing Drawer Layout and ActionBarToggle
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
@@ -147,18 +196,40 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(showUpdateDialog, new IntentFilter(ACTION_SHOW_UPDATE_DIALOG));
     }
     private void setToolBar() {
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
         ActionBar ab = getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.icon);
-        ab.setDisplayHomeAsUpEnabled(true);
+        //ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.login_menu, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.menu_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.login_menu, menu);
+        return true;
+    }*/
 
     @SuppressLint("ValidFragment")
     public class MySpinnerDialog extends DialogFragment {
@@ -248,7 +319,7 @@ public class MainActivity extends AppCompatActivity {
                     switch(json_data.getInt("id")){
                         case 0:
                             //successful login
-                            StoreSession(json_data.getString("session_username"), json_data.getString("session_name"), json_data.getString("session_techLevel"), json_data.getString("session_maintLevel"), json_data.getString("session_reqLevel"), json_data.getString("session_school"), json_data.getString("session_room"));
+                            StoreSession(json_data.getString("session_username"), json_data.getString("session_name"), json_data.getString("session_email"), json_data.getString("session_techLevel"), json_data.getString("session_maintLevel"), json_data.getString("session_reqLevel"), json_data.getString("session_school"), json_data.getString("session_room"));
                             LoginState = true;
                             break;
                         case 1:
@@ -343,9 +414,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void StoreSession(String username, String name, String techLevel, String maintLevel, String reqLevel, String school, String room){
+    private void StoreSession(String username, String name, String email, String techLevel, String maintLevel, String reqLevel, String school, String room){
         Properties.setUsername(username);
         Properties.setName(name);
+        Properties.setEmail(email);
         Properties.setTechLevel(techLevel);
         Properties.setMaintLevel(maintLevel);
         Properties.setReqLevel(reqLevel);

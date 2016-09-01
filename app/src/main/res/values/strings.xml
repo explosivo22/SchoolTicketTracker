@@ -62,4 +62,8 @@
     <string name="check_for_update_setting_summary">See if an update is available</string>
     <string name="checking_for_update">Checking for update...</string>
     <string name="ongoing_update">An update for GoIV is already being downloaded</string>
+    <string name="preferences">Preferences</string>
+    <string name="starred_string">Starred</string>
+    <string name="openDrawer">Open Drawer</string>
+    <string name="closeDrawer">Close Drawer</string>
 </resources>

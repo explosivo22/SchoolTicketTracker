@@ -9,6 +9,7 @@ public class Properties {
 	private static String page;
 	private static String username;
 	private static String name;
+	private static String email;
 	private static String techLevel;
 	private static String maintLevel;
 	private static String reqLevel;
@@ -79,12 +80,26 @@ public class Properties {
 	}
 	
 	/**
+	 * @param email The name of the user that logged in
+	 */
+	public static void setEmail(String email){
+		Properties.email = email;
+	}
+	
+	/**
+	 * @return email
+	 */
+	public static String getEmail(){
+		return Properties.email;
+	}
+
+	/**
 	 * @param name The name of the user that logged in
 	 */
 	public static void setName(String name){
 		Properties.name = name;
 	}
-	
+
 	/**
 	 * @return name
 	 */
