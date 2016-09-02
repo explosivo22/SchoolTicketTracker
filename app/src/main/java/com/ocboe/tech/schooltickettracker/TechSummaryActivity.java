@@ -108,7 +108,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 
 					//Replacing the main content with ContentFragment Which is our Inbox View;
 					case R.id.techsummary:
-						Toast.makeText(getApplicationContext(),"TechSummary Selected",Toast.LENGTH_SHORT).show();
 						if(fm.findFragmentByTag("techsummaryfragment") == null) {
 							Fragment fragment = new TechSummaryFragment();
 							fm.beginTransaction()
@@ -121,7 +120,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 					// For rest of the options we just show a toast on click
 
 					case R.id.dispose:
-						Toast.makeText(getApplicationContext(),"Dispose Selected",Toast.LENGTH_SHORT).show();
 						if(fm.findFragmentByTag("DisposeEquipment") == null) {
 							Fragment disposeFragment = new DisposeEquipmentFragment();
 							fm.popBackStack();
@@ -133,7 +131,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 						return true;
 
 					case R.id.inventory:
-						Toast.makeText(getApplicationContext(),"Inventory Selected",Toast.LENGTH_SHORT).show();
 						if(fm.findFragmentByTag("InventorySearch") == null){
 							Fragment inventoryFragment = new InventoryRoomFragment();
 							fm.popBackStack();
@@ -144,7 +141,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 						}
 						return true;
 					case R.id.settings:
-						Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
 						if(fm.findFragmentByTag("SettingsFragment") == null){
 							Fragment Settings = new SettingsFragment();
 							fm.popBackStack();
