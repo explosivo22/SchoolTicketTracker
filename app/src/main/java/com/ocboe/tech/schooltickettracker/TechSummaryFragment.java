@@ -83,7 +83,7 @@ public class TechSummaryFragment  extends ListFragment {
 			//change fragment to SettingsFragment
 			getFragmentManager().beginTransaction()
 				.replace(R.id.summaryListContainer, new SettingsFragment())
-				.addToBackStack("Settings")
+				.addToBackStack(null)
 				.commit();
 			break;
 		default:

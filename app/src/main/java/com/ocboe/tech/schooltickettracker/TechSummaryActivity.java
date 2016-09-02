@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -108,19 +109,50 @@ public class TechSummaryActivity extends ActionBarActivity {
 					//Replacing the main content with ContentFragment Which is our Inbox View;
 					case R.id.techsummary:
 						Toast.makeText(getApplicationContext(),"TechSummary Selected",Toast.LENGTH_SHORT).show();
+						if(fm.findFragmentByTag("techsummaryfragment") == null) {
+							Fragment fragment = new TechSummaryFragment();
+							fm.beginTransaction()
+									.replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
+									//.addToBackStack(null)
+									.commit();
+						}
 						return true;
 
 					// For rest of the options we just show a toast on click
 
 					case R.id.dispose:
 						Toast.makeText(getApplicationContext(),"Dispose Selected",Toast.LENGTH_SHORT).show();
+						if(fm.findFragmentByTag("DisposeEquipment") == null) {
+							Fragment disposeFragment = new DisposeEquipmentFragment();
+							fm.popBackStack();
+							fm.beginTransaction()
+									.replace(R.id.summaryListContainer, disposeFragment, "DisposeEquipment")
+									//.addToBackStack("DisposeEquipment")
+									.commit();
+						}
 						return true;
 
 					case R.id.inventory:
 						Toast.makeText(getApplicationContext(),"Inventory Selected",Toast.LENGTH_SHORT).show();
+						if(fm.findFragmentByTag("InventorySearch") == null){
+							Fragment inventoryFragment = new InventoryRoomFragment();
+							fm.popBackStack();
+							fm.beginTransaction()
+									.replace(R.id.summaryListContainer, inventoryFragment, "InventorySearch")
+									//.addToBackStack("InventorySearch")
+									.commit();
+						}
 						return true;
 					case R.id.settings:
 						Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
+						if(fm.findFragmentByTag("SettingsFragment") == null){
+							Fragment Settings = new SettingsFragment();
+							fm.popBackStack();
+							fm.beginTransaction()
+									.addToBackStack(null)
+									.replace(R.id.summaryListContainer, Settings, "SettingsFragment")
+									.commit();
+						}
 						return true;
 					default:
 						return true;
@@ -151,9 +183,12 @@ public class TechSummaryActivity extends ActionBarActivity {
 		if(fragmentManager.getBackStackEntryCount() != 0) {
 			fragmentManager.popBackStack();
 			TechSummaryFragment techFrag = (TechSummaryFragment)getFragmentManager().findFragmentByTag("techsummaryfragment");
-			if (techFrag.isVisible()) { //If we are in fragment A when we press the back button, finish is called to exit
+			SettingsFragment settingFrag = (SettingsFragment)getFragmentManager().findFragmentByTag("SettingsFragment");
+			if (techFrag != null && techFrag.isVisible()) { //If we are in fragment A when we press the back button, finish is called to exit
 				finish();
-			} else  {
+			} else if (settingFrag != null && settingFrag.isVisible()) {
+				fragmentManager.popBackStack();
+			}else {
 				//displayView(0); //else, switch to fragment A
 			}
 		} else {
@@ -181,78 +216,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 			});
 		}
 	}
-
-	private void selectItem(int position) {
-        // update the main content by replacing fragments
-
-		switch(position){
-		case 0:
-			if(fm.findFragmentByTag("techsummaryfragment") == null){
-		        Fragment fragment = new TechSummaryFragment();
-
-		        fm.beginTransaction()
-		        	.replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
-		        	//.addToBackStack(null)
-		        	.commit();
-	        }else {
-	        	fm.popBackStack("techsummaryfragment",0);
-	        	//Fragment fragment = new TechSummaryFragment();
-
-		        //fragmentManager.beginTransaction().replace(R.id.summaryListContainer, fragment, "techsummaryfragment").commit();
-	        }
-			if(fm.findFragmentByTag("DisposeEquipment") != null){
-				fm.popBackStack("DisposeEquipment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			}
-	        break;
-		case 1:
-			if(fm.findFragmentByTag("techsummaryfragment") != null){
-				fm.popBackStack("techsummaryfragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			}
-			if(fm.findFragmentByTag("DisposeEquipment") != null){
-				fm.popBackStack("DisposeEquipment", 0);
-			} else {
-			//fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			fm.popBackStack();
-			Fragment disposeFragment = new DisposeEquipmentFragment();
-			fm.beginTransaction()
-				.replace(R.id.summaryListContainer, disposeFragment)
-				.addToBackStack("DisposeEquipment")
-				.commit();
-			}
-
-			break;
-		case 2:
-			if(fm.findFragmentByTag("techsummaryfragment") != null){
-				fm.popBackStack("techsummaryfragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			}
-			if(fm.findFragmentByTag("DisposeEquipment") != null){
-				fm.popBackStack("DisposeEquipment", 0);
-			} else {
-			//fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-			fm.popBackStack();
-			Fragment inventoryFragment = new InventoryRoomFragment();
-			fm.beginTransaction()
-				.replace(R.id.summaryListContainer, inventoryFragment)
-				.addToBackStack("InventorySearch")
-				.commit();
-			}
-
-			break;
-		case 3:
-			Fragment Settings = new SettingsFragment();
-
-	        FragmentManager SettingsFragmentManager = getFragmentManager();
-	        //fragmentManager.popBackStack("TechSummaryFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-	        SettingsFragmentManager.beginTransaction()
-		        .addToBackStack(null)
-		        .replace(R.id.summaryListContainer, Settings)
-		        .commit();
-
-	        break;
-			default:
-	    	break;
-		}
-    }
 
 	public void setActionBarTitle(String title) {
 		getSupportActionBar().setTitle(title);
