@@ -46,6 +46,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -53,6 +54,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Brad on 8/31/2016.
@@ -114,20 +123,24 @@ public class MainActivity extends AppCompatActivity {
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.techsummary:
-                        Toast.makeText(getApplicationContext(),"TechSummary Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                "TechSummary Selected",Toast.LENGTH_SHORT).show();
                         return true;
 
                     // For rest of the options we just show a toast on click
 
                     case R.id.dispose:
-                        Toast.makeText(getApplicationContext(),"Dispose Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Dispose Selected",Toast.LENGTH_SHORT).show();
                         return true;
 
                     case R.id.inventory:
-                        Toast.makeText(getApplicationContext(),"Inventory Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Inventory Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.settings:
-                        Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                "Settings Selected",Toast.LENGTH_SHORT).show();
                         return true;
                     default:
                         return true;
@@ -152,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
-        if (BuildConfig.isInternetAvailable && sharedPrefs.getBoolean("autoUpdateEnabled", true))
+        if (BuildConfig.isInternetAvailable &&
+                sharedPrefs.getBoolean("autoUpdateEnabled", true))
             AppUpdateUtil.checkForUpdate(mContext);
 
         //Retrieve any saved values set by the remember me option
@@ -183,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
                 args.putString("title", "logging in...");
                 myInstance.setArguments(args);
                 myInstance.show(fm, "update_dialog");
-                new Login().execute(Properties.getURL(),username.getText().toString(),password.getText().toString());
+                new Login().execute(Properties.getURL(),
+                        username.getText().toString(),password.getText().toString());
 
             }
         });
@@ -195,7 +210,8 @@ public class MainActivity extends AppCompatActivity {
         Properties.setPage("logonandroid.php");
 
         //setHasOptionsMenu(true);
-        LocalBroadcastManager.getInstance(this).registerReceiver(showUpdateDialog, new IntentFilter(ACTION_SHOW_UPDATE_DIALOG));
+        LocalBroadcastManager.getInstance(this).registerReceiver(showUpdateDialog,
+                new IntentFilter(ACTION_SHOW_UPDATE_DIALOG));
     }
     private void setToolBar() {
         tb = (Toolbar) findViewById(R.id.toolbar);
@@ -257,9 +273,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
-        //getActivity().getActionBar().setTitle("Login");
-        //AppCompatActivity activity = (AppCompatActivity) getActivity();
         wifiInfo = wifiManager.getConnectionInfo();
         getSupportActionBar().setTitle("Login");
         Properties.setPage("logonandroid.php");
@@ -276,71 +289,67 @@ public class MainActivity extends AppCompatActivity {
 
         protected Toast doInBackground(String... vars){
 
-            InputStream is = null;
-            String result = "";
+            //use OkHttpClient to do a post
+            OkHttpClient httpClient = new OkHttpClient();
 
-            //http post
-            try{
+            //build the body to send the post parameters
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username", vars[1])
+                    .add("password", vars[2])
+                    .build();
 
-                //final String USER_AGENT = "Mozilla/5.0";
-                URL url = new URL(vars[0]);
-                //Log.d(TAG, url.toString());
-                String urlParameters = "username=" + vars[1] + "&password=" + vars[2];
-                byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-                int postDataLength = postData.length;
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestMethod("POST");
-                //conn.setRequestProperty("User-Agent", USER_AGENT);
-                conn.setRequestProperty("Accept-Language", "UTF-8");
+            //build the post request with url and the body
+            Request request = new Request.Builder()
+                    .url(vars[0])
+                    .post(formBody)
+                    .build();
 
-                conn.setDoOutput(true);
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
-                outputStreamWriter.write(urlParameters);
-                outputStreamWriter.flush();
+            try {
+                //make the OkHttpClient Call
+                Response response = httpClient.newCall(request).execute();
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
+                //get the return code from the call
+                final int code = response.code();
 
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
+                //code of 200 = OK
+                if (code == 200) {
+                    try {
+                        //get the response body string which is a JSONObject
+                        JSONObject responseInfo = new JSONObject(response.body().string());
 
-                System.out.println(response.toString());
-                result = response.toString();
-            }catch(Exception e){
-                // Log.d(TAG, "Error in http connection "+e.toString());
-            }
-            //parse json data
-            try{
-                JSONArray jArray = new JSONArray(result);
-                for(int i=0;i<jArray.length();i++){
-                    json_data = jArray.getJSONObject(i);
-                    //Log.i("log_tag","id: " + json_data.getInt("id") + ", response: " + json_data.getString("response") + ", session_username: " + json_data.getString("session_username") + ", session_name: " + json_data.getString("session_name") + ", session_techLevel: " + json_data.getString("session_techLevel") + ", session_maintLevel: " + json_data.getString("session_maintLevel") + ", session_reqLevel: " + json_data.getString("session_reqLevel") + ", session_school: " + json_data.getString("session_school") + ", session_room: " + json_data.getString("session_room"));
-                    switch(json_data.getInt("id")){
-                        case 0:
-                            //successful login
-                            StoreSession(json_data.getString("session_username"), json_data.getString("session_name"), json_data.getString("session_email"), json_data.getString("session_techLevel"), json_data.getString("session_maintLevel"), json_data.getString("session_reqLevel"), json_data.getString("session_school"), json_data.getString("session_room"));
-                            LoginState = true;
-                            break;
-                        case 1:
-                            LoginState = false;
-                            msg = json_data.getString("response");
-                            break;
-                        default:
-                            LoginState = false;
-                            break;
+                        //get the assets from the login
+                        JSONObject responseAssets = responseInfo.getJSONArray("assets").getJSONObject(0);
+
+                        //test the response to see what the login result was
+                        switch (responseInfo.getInt("id")) {
+                            //successful login.  store the session results
+                            case 0:
+                                StoreSession(responseAssets.getString("session_username"),
+                                        responseAssets.getString("session_name"),
+                                        responseAssets.getString("session_email"),
+                                        responseAssets.getString("session_techLevel"),
+                                        responseAssets.getString("session_maintLevel"),
+                                        responseAssets.getString("session_reqLevel"),
+                                        responseAssets.getString("session_school"),
+                                        responseAssets.getString("session_room"));
+                                LoginState = true;
+                                break;
+                            //there was a problem.  return the message to the user
+                            case 1:
+                                LoginState = false;
+                                msg = responseAssets.getString("response");
+                                break;
+                            //default case that it didn't work
+                            default:
+                                LoginState = false;
+                                break;
+                        }
+                    } catch (JSONException je) {
+                        je.printStackTrace();
                     }
                 }
-
-            }catch(JSONException e){
-                Log.d(TAG, "Error parsing data "+e.toString());
-                //msg = "Login unsuccessful";
-                //Toast.makeText(getActivity().getApplicationContext(), "Login unsuccessful", Toast.LENGTH_SHORT).show();
-            }catch(Exception e){
-                Log.d(TAG, "Caught Error "+e.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             return null;
@@ -348,14 +357,6 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPostExecute(Toast result){
             if(LoginState){
-				/*TechSummaryFragment mFragment = new TechSummaryFragment();
-				FragmentManager fm = getFragmentManager();
-				FragmentTransaction ft = fm.beginTransaction();
-
-				ft.replace(R.id.summaryListContainer, mFragment);
-				ft.addToBackStack("Login");
-				ft.commit();*/
-                //Log.d(TAG, "onPostExecute");
                 myInstance.dismiss();
                 Intent TechSummary = new Intent(mContext, TechSummaryActivity.class);
                 startActivity(TechSummary);
@@ -392,7 +393,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void DeleteSaved(){
-        SharedPreferences preferences = this.getSharedPreferences("schooltickettracker", Context.MODE_PRIVATE);
+        SharedPreferences preferences = this.getSharedPreferences("schooltickettracker",
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("password");
         editor.putBoolean("remember_me", remember_me.isChecked());
@@ -400,7 +402,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void GetSaved() {
-        SharedPreferences pref = this.getSharedPreferences("schooltickettracker", Context.MODE_PRIVATE);
+        SharedPreferences pref = this.getSharedPreferences("schooltickettracker",
+                Context.MODE_PRIVATE);
         boolean saved = pref.getBoolean("remember_me", false);
         String user = pref.getString("username", null);
         String passw = pref.getString("password", null);
@@ -419,7 +422,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void StoreSession(String username, String name, String email, String techLevel, String maintLevel, String reqLevel, String school, String room){
+    private void StoreSession(String username, String name, String email, String techLevel,
+                              String maintLevel, String reqLevel, String school, String room){
         Properties.setUsername(username);
         Properties.setName(name);
         Properties.setEmail(email);
@@ -434,7 +438,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             AppUpdate update = intent.getParcelableExtra("update");
-            if (update.getStatus() == AppUpdate.UPDATE_AVAILABLE && shouldShowUpdateDialog && !isSchoolTicketTrackerBeingUpdated(context)) {
+            if (update.getStatus() == AppUpdate.UPDATE_AVAILABLE && shouldShowUpdateDialog
+                    && !isSchoolTicketTrackerBeingUpdated(context)) {
                 //Log.d(TAG, "onReceive: update status:" + update.getStatus());
                 AlertDialog updateDialog = AppUpdateUtil.getAppUpdateDialog(mContext, update);
                 updateDialog.show();
