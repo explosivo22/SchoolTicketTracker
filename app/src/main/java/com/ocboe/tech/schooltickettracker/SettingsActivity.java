@@ -52,7 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog updateDialog = AppUpdateUtil.getAppUpdateDialog(mContext, update);
                 updateDialog.show();
             } else if (update.getStatus() == AppUpdate.UP_TO_DATE)
-                Toast.makeText(mContext, getResources().getString(R.string.up_to_date), Toast.LENGTH_SHORT).show();
+                Snackbar.make(getWindow().getDecorView().getRootView(),
+                        getResources().getString(R.string.up_to_date), Snackbar.LENGTH_SHORT).show();
             else
                 Toast.makeText(mContext, getResources().getString(R.string.update_check_failed), Toast.LENGTH_SHORT)
                         .show();
@@ -76,11 +77,11 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         if (!MainActivity.isSchoolTicketTrackerBeingUpdated(getActivity())) {
-                            Snackbar.make(TechSummaryActivity.mView, getResources().getString(R.string.checking_for_update), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), getResources().getString(R.string.checking_for_update), Snackbar.LENGTH_SHORT).show();
                             MainActivity.shouldShowUpdateDialog = false;
                             AppUpdateUtil.checkForUpdate(getActivity());
                         } else
-                            Snackbar.make(TechSummaryActivity.mView, getResources().getString(R.string.ongoing_update), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), getResources().getString(R.string.ongoing_update), Snackbar.LENGTH_SHORT).show();
                         return true;
                     }
                 });
