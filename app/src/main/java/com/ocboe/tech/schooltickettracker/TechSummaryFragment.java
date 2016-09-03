@@ -3,10 +3,8 @@ package com.ocboe.tech.schooltickettracker;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -17,11 +15,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,7 +39,6 @@ public class TechSummaryFragment  extends ListFragment {
 	private String[] techresults;
 	
 	private Fragment mFragment;
-	//private ActionBar actionBar;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
@@ -103,7 +97,6 @@ public class TechSummaryFragment  extends ListFragment {
 		String school = (String)l.getItemAtPosition(position);
 		school = school.substring(0,school.indexOf("-")-1);
 		mBundle.putString("school", school);
-		Log.d("School Tech", school);
 		mFragment.setArguments(mBundle);
 		FragmentManager fm = getFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
@@ -167,9 +160,8 @@ public class TechSummaryFragment  extends ListFragment {
 
 				System.out.println(response.toString());
 				result = response.toString();
-	            Log.d(TAG,result);
 	        }catch(Exception e){
-	            Log.d(TAG, "Error converting result "+e.toString());
+				e.printStackTrace();
 	        }
 	        //parse json data
 	        try{
