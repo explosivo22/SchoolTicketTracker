@@ -52,6 +52,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.cert.Certificate;
 
 /**
  * Created by Brad on 8/31/2016.
@@ -187,13 +188,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(CheckWifi()){
-            Properties.setIPAddress("10.99.0.26");
-            DisplayIP.setText("IP: Internal");
-        }else {
-            Properties.setIPAddress("96.4.160.69");
-            DisplayIP.setText("IP: External");
-        }
+        CheckWifi();
 
         Properties.setPort(4001);
 
@@ -268,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
         wifiInfo = wifiManager.getConnectionInfo();
         getSupportActionBar().setTitle("Login");
         Properties.setPage("logonandroid.php");
+        CheckWifi();
     }
 
     private class Login extends AsyncTask<String, Integer, Toast> {
@@ -370,16 +366,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean CheckWifi(){
-        wifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
+    private void CheckWifi(){
+        wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
         wifiInfo = wifiManager.getConnectionInfo();
 
-        if(wifiInfo.getSSID()=="OCS") {
+        if(wifiInfo.getSSID().contains("OCS")) {
             Log.d(TAG, "CheckWifi: Connected to Internal Network");
-            return true;
+            Properties.setIPAddress("10.99.0.26");
+            DisplayIP.setText("IP: Internal");
         }else{
             Log.d(TAG, "CheckWifi: Connected to External Network");
-            return false;
+            Properties.setIPAddress("96.4.160.69");
+            DisplayIP.setText("IP: External");
         }
     }
 

@@ -231,13 +231,13 @@ public class TechSummaryFragment  extends ListFragment {
 		}
 		
 		protected void onPostExecute(Toast result) {
-			
+
 			adapter = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_list_item_1, results);
-			
+
 			setListAdapter(adapter);
-			
+
 			((TechSummaryActivity) getActivity()).setActionBarTitle("Total Orders: " + totalOrders);
-			
+
 			adapter.notifyDataSetChanged();
 			
 			//actionBar.setTitle("Total Orders: " + totalOrders);
