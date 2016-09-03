@@ -17,6 +17,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -107,11 +108,8 @@ public class SchoolSummaryFragment extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
 		case R.id.menu_settings:
-			//change fragment to SettingsFragment
-			getFragmentManager().beginTransaction()
-				.replace(R.id.summaryListContainer, new SettingsFragment())
-				.addToBackStack("Settings")
-				.commit();
+			Intent SettingsActivity = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+			startActivity(SettingsActivity);
 			break;
 		default:
 			break;

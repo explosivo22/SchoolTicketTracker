@@ -68,14 +68,12 @@ import okhttp3.Response;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private JSONObject json_data;
-    private String session_info[];
     private EditText username, password;
     private CheckBox remember_me;
     private TextView DisplayIP;
     private boolean LoginState = false;
     private MySpinnerDialog myInstance;
-    private String TAG = "SCHOOL_TICKET";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private String msg = null;
     public static Context mContext;
     private static WifiInfo wifiInfo;
@@ -83,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar tb;
+    private SharedPreferences sharedPrefs;
+
+    private SchoolTicketTrackerSettings settings;
 
     public static final String ACTION_SHOW_UPDATE_DIALOG = "show-update-dialog";
     public static boolean shouldShowUpdateDialog;
@@ -162,12 +163,13 @@ public class MainActivity extends AppCompatActivity {
         mContext = MainActivity.this;
         shouldShowUpdateDialog = true;
 
-        SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        settings = SchoolTicketTrackerSettings.getInstance(mContext);
 
         if (BuildConfig.isInternetAvailable &&
-                sharedPrefs.getBoolean("autoUpdateEnabled", true))
+                settings.isAutoUpdateEnabled())
             AppUpdateUtil.checkForUpdate(mContext);
+
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         //Retrieve any saved values set by the remember me option
         GetSaved();
@@ -283,8 +285,6 @@ public class MainActivity extends AppCompatActivity {
 
         protected void onPreExecute(){
             super.onPreExecute();
-
-            session_info = null;
         }
 
         protected Toast doInBackground(String... vars){

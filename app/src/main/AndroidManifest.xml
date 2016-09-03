@@ -26,6 +26,11 @@
         <activity android:name=".TechSummaryActivity"
             android:parentActivityName=".MainActivity"/>
 
+        <activity android:name=".DisposeActivity"/>
+
+        <activity android:name=".SettingsActivity"
+            android:parentActivityName=".TechSummaryActivity"/>
+
         <service android:name=".updater.DownloadUpdateService"
             android:exported="false" />
     </application>

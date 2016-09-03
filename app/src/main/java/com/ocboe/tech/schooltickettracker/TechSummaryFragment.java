@@ -14,6 +14,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,11 +72,8 @@ public class TechSummaryFragment  extends ListFragment {
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
 		case R.id.menu_settings:
-			//change fragment to SettingsFragment
-			getFragmentManager().beginTransaction()
-				.replace(R.id.summaryListContainer, new SettingsFragment())
-				.addToBackStack(null)
-				.commit();
+			Intent SettingsActivity = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+			startActivity(SettingsActivity);;
 			break;
 		default:
 			break;

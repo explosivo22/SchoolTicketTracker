@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,8 +52,8 @@ public class InventoryRoomFragment extends Fragment{
 		RoomSpinner = (Spinner)view.findViewById(R.id.roomSpinner);
 		UserSpinner = (Spinner)view.findViewById(R.id.userSpinner);
 		
-		RoomSpinner.setVisibility(4);
-		UserSpinner.setVisibility(4);
+		RoomSpinner.setVisibility(View.GONE);
+		UserSpinner.setVisibility(View.GONE);
 		
 		SchoolSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -124,11 +125,8 @@ public class InventoryRoomFragment extends Fragment{
 	public boolean onOptionsItemSelected(MenuItem item){
 		switch(item.getItemId()){
 		case R.id.menu_settings:
-			//change fragment to SettingsFragment
-			getFragmentManager().beginTransaction()
-				.replace(R.id.summaryListContainer, new SettingsFragment())
-				.addToBackStack("Settings")
-				.commit();
+			Intent SettingsActivity = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+			startActivity(SettingsActivity);
 			break;
 		default:
 			break;
@@ -213,8 +211,8 @@ public class InventoryRoomFragment extends Fragment{
 			//myInstance.dismiss();
 			//Toast.makeText(getActivity().getApplicationContext(), UpdateResults, Toast.LENGTH_LONG).show();
 			
-			RoomSpinner.setVisibility(0);
-			UserSpinner.setVisibility(0);
+			RoomSpinner.setVisibility(View.VISIBLE);
+			UserSpinner.setVisibility(View.VISIBLE);
 			inhibitUser = true;
 			inhibitRoom = true;
 			

@@ -120,14 +120,10 @@ public class TechSummaryActivity extends ActionBarActivity {
 					// For rest of the options we just show a toast on click
 
 					case R.id.dispose:
-						if(fm.findFragmentByTag("DisposeEquipment") == null) {
-							Fragment disposeFragment = new DisposeEquipmentFragment();
-							fm.popBackStack();
-							fm.beginTransaction()
-									.replace(R.id.summaryListContainer, disposeFragment, "DisposeEquipment")
-									//.addToBackStack("DisposeEquipment")
-									.commit();
-						}
+						Intent DisposeActivity = new Intent(mContext, DisposeActivity.class);
+						DisposeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(DisposeActivity);
+						finish();
 						return true;
 
 					case R.id.inventory:
@@ -141,14 +137,8 @@ public class TechSummaryActivity extends ActionBarActivity {
 						}
 						return true;
 					case R.id.settings:
-						if(fm.findFragmentByTag("SettingsFragment") == null){
-							Fragment Settings = new SettingsFragment();
-							fm.popBackStack();
-							fm.beginTransaction()
-									.addToBackStack(null)
-									.replace(R.id.summaryListContainer, Settings, "SettingsFragment")
-									.commit();
-						}
+						Intent SettingsActivity = new Intent(mContext, SettingsActivity.class);
+						startActivity(SettingsActivity);
 						return true;
 					default:
 						return true;
@@ -179,12 +169,9 @@ public class TechSummaryActivity extends ActionBarActivity {
 		if(fragmentManager.getBackStackEntryCount() != 0) {
 			fragmentManager.popBackStack();
 			TechSummaryFragment techFrag = (TechSummaryFragment)getFragmentManager().findFragmentByTag("techsummaryfragment");
-			SettingsFragment settingFrag = (SettingsFragment)getFragmentManager().findFragmentByTag("SettingsFragment");
 			if (techFrag != null && techFrag.isVisible()) { //If we are in fragment A when we press the back button, finish is called to exit
 				finish();
-			} else if (settingFrag != null && settingFrag.isVisible()) {
-				fragmentManager.popBackStack();
-			}else {
+			} else {
 				//displayView(0); //else, switch to fragment A
 			}
 		} else {
