@@ -1,7 +1,6 @@
 package com.ocboe.tech.schooltickettracker;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -29,9 +28,7 @@ import android.widget.Toast;
 
 public class TechSummaryFragment  extends ListFragment {
 	
-	private static final String TAG = "School Tech";
-	
-	private ArrayList<String> results = new ArrayList<String> ();
+	private ArrayList<String> results = new ArrayList<> ();
 	private ArrayAdapter<String> adapter;
 	
 	private int totalOrders = 0;
@@ -117,8 +114,7 @@ public class TechSummaryFragment  extends ListFragment {
 		}
 		
 		protected Toast doInBackground(String... vars) {
-			
-			InputStream is = null;
+
 	        String result = "";
 	        totalOrders = 0;
 	        techresults = null;
@@ -170,7 +166,7 @@ public class TechSummaryFragment  extends ListFragment {
 	            	JSONObject json_data = jArray.getJSONObject(i);
 	            	 //Log.d(TAG,"school: " + json_data.getString("school") + ", orders: " + json_data.getInt("orders"));
 
-	            	if(json_data.getString("orders").equals(0)){
+	            	if(json_data.getInt("orders") == 0){
 	            		String test = "There are no tickets at this time";
 	            		results.add(test);
 	            	}else{
@@ -224,7 +220,7 @@ public class TechSummaryFragment  extends ListFragment {
 		
 		protected void onPostExecute(Toast result) {
 
-			adapter = new ArrayAdapter<String> (getActivity(), android.R.layout.simple_list_item_1, results);
+			adapter = new ArrayAdapter<> (getActivity(), android.R.layout.simple_list_item_1, results);
 
 			setListAdapter(adapter);
 
