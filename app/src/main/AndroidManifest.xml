@@ -28,8 +28,9 @@
 
         <activity android:name=".DisposeActivity"/>
 
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".TechSummaryActivity"/>
+        <activity android:name=".SettingsActivity" />
+
+        <activity android:name=".InventoryActivity" />
 
         <service android:name=".updater.DownloadUpdateService"
             android:exported="false" />

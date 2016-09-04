@@ -67,6 +67,8 @@ public class DisposeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dispose);
 
         mContext = DisposeActivity.this;
+        fm = getFragmentManager();
+
         setToolBar();
         setUpNavDrawer();
 
@@ -100,13 +102,10 @@ public class DisposeActivity extends AppCompatActivity {
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.techsummary:
-                        if(fm.findFragmentByTag("techsummaryfragment") == null) {
-                            Fragment fragment = new TechSummaryFragment();
-                            fm.beginTransaction()
-                                    .replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
-                                    //.addToBackStack(null)
-                                    .commit();
-                        }
+                        Intent TechSummaryActivity = new Intent(mContext, TechSummaryActivity.class);
+                        TechSummaryActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(TechSummaryActivity);
+                        finish();
                         return true;
 
                     // For rest of the options we just show a toast on click
@@ -119,14 +118,10 @@ public class DisposeActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.inventory:
-                        if(fm.findFragmentByTag("InventorySearch") == null){
-                            Fragment inventoryFragment = new InventoryRoomFragment();
-                            fm.popBackStack();
-                            fm.beginTransaction()
-                                    .replace(R.id.summaryListContainer, inventoryFragment, "InventorySearch")
-                                    //.addToBackStack("InventorySearch")
-                                    .commit();
-                        }
+                        Intent InventoryActivity = new Intent(mContext, InventoryActivity.class);
+                        InventoryActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(InventoryActivity);
+                        finish();
                         return true;
                     case R.id.settings:
                         Intent SettingsActivity = new Intent(mContext, SettingsActivity.class);

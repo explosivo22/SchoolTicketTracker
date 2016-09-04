@@ -127,14 +127,10 @@ public class TechSummaryActivity extends ActionBarActivity {
 						return true;
 
 					case R.id.inventory:
-						if(fm.findFragmentByTag("InventorySearch") == null){
-							Fragment inventoryFragment = new InventoryRoomFragment();
-							fm.popBackStack();
-							fm.beginTransaction()
-									.replace(R.id.summaryListContainer, inventoryFragment, "InventorySearch")
-									//.addToBackStack("InventorySearch")
-									.commit();
-						}
+						Intent InventoryActivity = new Intent(mContext, InventoryActivity.class);
+						InventoryActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						startActivity(InventoryActivity);
+						finish();
 						return true;
 					case R.id.settings:
 						Intent SettingsActivity = new Intent(mContext, SettingsActivity.class);
