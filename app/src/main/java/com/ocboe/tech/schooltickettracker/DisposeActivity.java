@@ -17,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -44,6 +46,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Brad on 9/3/2016.
@@ -60,6 +68,7 @@ public class DisposeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private FragmentManager fm;
     private TextView header_user_name, header_email;
+    private static final String TAG = DisposeActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -301,52 +310,36 @@ public class DisposeActivity extends AppCompatActivity {
 
         protected Toast doInBackground(String... vars){
 
-            InputStream is = null;
-            String result = "";
+            OkHttpClient httpClient = new OkHttpClient();
+
+            RequestBody formBody = new FormBody.Builder()
+                    .add("tag", vars[1])
+                    .add("dispose", vars[2])
+                    .add("info", vars[3])
+                    .build();
+
+            Request request = new Request.Builder()
+                    .url(vars[0])
+                    .post(formBody)
+                    .build();
 
             try{
+                Response response = httpClient.newCall(request).execute();
 
-                //final String USER_AGENT = "Mozilla/5.0";
-                URL url = new URL(vars[0]);
-                //Log.d(TAG, url.toString());
-                String urlParameters = "tag=" + vars[1] + "&dispose=" + vars[2] + "&info=" + vars[3];
-                byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
-                int postDataLength = postData.length;
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                conn.setRequestMethod("POST");
-                //conn.setRequestProperty("User-Agent", USER_AGENT);
-                conn.setRequestProperty("Accept-Language", "UTF-8");
+                final int code = response.code();
 
-                conn.setDoOutput(true);
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(conn.getOutputStream());
-                outputStreamWriter.write(urlParameters);
-                outputStreamWriter.flush();
+                if (code == 200) {
+                    try{
+                        JSONObject responseInfo = new JSONObject(response.body().string());
+                        JSONObject responseAssets = responseInfo.getJSONArray("response").getJSONObject(0);
 
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
+                        UpdateResults = responseAssets.getString("dispose_response");
 
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
+                    } catch(JSONException je){
+                        je.printStackTrace();
+                    }
                 }
-                in.close();
-
-                System.out.println(response.toString());
-                result = response.toString();
-            } catch (Exception e) {
-                //Log.d(TAG, "Error converting result " + e.toString());
-            }
-            // parse json data
-            try {
-                JSONArray jArray = new JSONArray(result);
-                for (int i = 0; i < jArray.length(); i++) {
-                    JSONObject json_data = jArray.getJSONObject(i);
-                    //Log.i("log_tag", "id: " + json_data.getInt("id")+ ", response: " + json_data.getString("response"));
-                    UpdateResults = json_data.getString("response");
-                }
-
-            } catch (JSONException e) {
+            } catch (IOException e){
                 e.printStackTrace();
             }
 
