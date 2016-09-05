@@ -97,7 +97,7 @@ public class TechSummaryFragment  extends ListFragment {
 		FragmentTransaction ft = fm.beginTransaction();
 
 		ft.replace(R.id.summaryListContainer, mFragment);
-		ft.addToBackStack("schoolsummaryfragment");
+		ft.addToBackStack(null);
 		ft.commit();
  
     }

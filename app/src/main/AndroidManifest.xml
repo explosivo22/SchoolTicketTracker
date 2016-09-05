@@ -16,7 +16,9 @@
         android:theme="@style/MyAppTheme"
         android:supportsRtl="true">
 
-        <activity android:name=".MainActivity" android:windowSoftInputMode="stateHidden|adjustResize">
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:configChanges="orientation|keyboardHidden|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -24,13 +26,17 @@
         </activity>
 
         <activity android:name=".TechSummaryActivity"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <activity android:name=".DisposeActivity"/>
+        <activity android:name=".DisposeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <activity android:name=".InventoryActivity" />
+        <activity android:name=".InventoryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
 
         <service android:name=".updater.DownloadUpdateService"
             android:exported="false" />

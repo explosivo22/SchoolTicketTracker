@@ -112,7 +112,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 							Fragment fragment = new TechSummaryFragment();
 							fm.beginTransaction()
 									.replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
-									//.addToBackStack(null)
+									.addToBackStack(null)
 									.commit();
 						}
 						return true;
@@ -149,7 +149,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 
 		fm.beginTransaction()
 				.replace(R.id.summaryListContainer, fragment, "techsummaryfragment")
-				//.addToBackStack(null)
+				.addToBackStack(null)
 				.commit();
 
 	}
