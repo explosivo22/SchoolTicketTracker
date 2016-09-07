@@ -29,6 +29,10 @@
             android:checked="false"
             android:icon="@drawable/ic_settings_black_48dp"
             android:title="@string/settings" />
-
+        <item
+            android:id="@+id/openSource"
+            android:checked="false"
+            android:icon="@drawable/ic_info_black_48dp"
+            android:title="@string/open_source_setting_title" />
     </group>
 </menu>

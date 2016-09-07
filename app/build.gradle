@@ -32,7 +32,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -45,6 +45,9 @@ dependencies {
 
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'org.greenrobot:eventbus:3.0.0'
+    compile('com.mikepenz:aboutlibraries:5.8.1@aar') {
+        transitive = true
+    }
 
     provided "org.projectlombok:lombok:1.12.6"
 }

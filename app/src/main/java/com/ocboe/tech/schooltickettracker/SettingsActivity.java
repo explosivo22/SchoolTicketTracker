@@ -1,5 +1,6 @@
 package com.ocboe.tech.schooltickettracker;
 
+import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.aboutlibraries.LibsFragmentCompat;
+import com.mikepenz.aboutlibraries.ui.LibsFragment;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdate;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdateUtil;
 

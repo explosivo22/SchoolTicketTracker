@@ -30,6 +30,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -135,6 +137,19 @@ public class DisposeActivity extends AppCompatActivity {
                     case R.id.settings:
                         Intent SettingsActivity = new Intent(mContext, SettingsActivity.class);
                         startActivity(SettingsActivity);
+                        return true;
+                    case R.id.openSource:
+                        new LibsBuilder()
+                                .withFields(R.string.class.getFields())
+                                .withAutoDetect(true)
+                                .withVersionShown(false)
+                                .withLicenseShown(false)
+                                .withActivityTheme(R.style.AppTheme)
+                                .withActivityTitle(getString(R.string.open_source_setting_title))
+                                .withAboutIconShown(true)
+                                .withAboutVersionShown(true)
+                                .withAboutDescription(getString(R.string.app_license_description))
+                                .start(DisposeActivity.this);
                         return true;
                     default:
                         return true;

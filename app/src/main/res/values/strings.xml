@@ -69,4 +69,6 @@
     <string name="settings_page_title">Settings</string>
     <string name="update_check_failed">An error occured while checking for an update. Please check your internet connection</string>
     <string name="up_to_date">Your app is up-to-date</string>
+    <string name="open_source_setting_title">Open source licenses</string>
+    <string name="app_license_description">Small app that incorporates into the ticket website allowing users to track tickets, dispose equipment, and view inventory.</string>
 </resources>

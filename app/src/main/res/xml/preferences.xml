@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-        <PreferenceCategory android:title="@string/preference_display_update" android:key="pref_key_update_settings">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/preference_display_update" android:key="pref_key_update_settings">
 
-            <SwitchPreference
-                android:key="autoUpdateEnabled"
-                android:title="@string/auto_update_setting_title"
-                android:summary="@string/auto_update_setting_summary"
-                android:defaultValue="true"/>
+        <SwitchPreference
+            android:key="autoUpdateEnabled"
+            android:title="@string/auto_update_setting_title"
+            android:summary="@string/auto_update_setting_summary"
+            android:defaultValue="true"/>
 
-            <Preference
-                android:key="checkForUpdate"
-                android:title="@string/check_for_update_setting_title"
-                android:summary="@string/check_for_update_setting_summary" />
+        <Preference
+            android:key="checkForUpdate"
+            android:title="@string/check_for_update_setting_title"
+            android:summary="@string/check_for_update_setting_summary" />
 
-        </PreferenceCategory>
-    </PreferenceScreen>
+    </PreferenceCategory>
+</PreferenceScreen>
