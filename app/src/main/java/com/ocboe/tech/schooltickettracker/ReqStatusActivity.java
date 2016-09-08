@@ -1,16 +1,8 @@
 package com.ocboe.tech.schooltickettracker;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,17 +10,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ListViewCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,18 +27,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.ArrayList;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -58,29 +37,44 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- * Created by Brad on 9/3/2016.
+ * Created by Brad on 9/6/2016.
  */
-public class DisposeActivity extends AppCompatActivity {
-    private static EditText Tag;
-    private static EditText DisposeInfo;
-    private static EditText DateDisplay;
-    private String UpdateResults;
-    private MySpinnerDialog myInstance;
+public class ReqStatusActivity extends AppCompatActivity {
+
+    private ArrayList<String> results = new ArrayList<>();
+    private ArrayAdapter<String> adapter;
+    private static final String TAG = ReqStatusActivity.class.getSimpleName();
     protected Context mContext;
     private Toolbar tb;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private FragmentManager fm;
     private TextView header_user_name, header_email;
-    private static final String TAG = DisposeActivity.class.getSimpleName();
+    private ListView reqList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dispose);
+        setContentView(R.layout.activity_reqstatus);
+        Properties.setPage("reqStatusAndroid.php");
+        new getReqStatus().execute(Properties.getURL());
 
-        mContext = DisposeActivity.this;
-        fm = getFragmentManager();
+        mContext = ReqStatusActivity.this;
+
+        reqList = (ListView) findViewById(R.id.reqList);
+
+        reqList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String reqNumber = (String)parent.getItemAtPosition(position);
+                reqNumber = reqNumber.substring(6,reqNumber.indexOf("P")-1);
+                Properties.setPage("viewPDF.php?id=");
+                Intent startDownloadIntent = new Intent(ReqStatusActivity.this,DownloadReqPDFService.class);
+                startDownloadIntent.putExtra("downloadURL", Properties.getURL() + reqNumber);
+                startDownloadIntent.putExtra("downloadFileName", "req" + reqNumber + ".pdf");
+                startService(startDownloadIntent);
+            }
+        });
 
         setToolBar();
         setUpNavDrawer();
@@ -155,7 +149,7 @@ public class DisposeActivity extends AppCompatActivity {
                                 .withAboutIconShown(true)
                                 .withAboutVersionShown(true)
                                 .withAboutDescription(getString(R.string.app_license_description))
-                                .start(DisposeActivity.this);
+                                .start(mContext);
                         return true;
                     default:
                         return true;
@@ -165,57 +159,6 @@ public class DisposeActivity extends AppCompatActivity {
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        Tag = (EditText)findViewById(R.id.disposeTag);
-        DisposeInfo = (EditText)findViewById(R.id.disposeInfo);
-
-        //set text to the most commonly disposed of method
-        DisposeInfo.setText(R.string.e_waste);
-
-        DateDisplay = (EditText)findViewById(R.id.dateDisplay);
-
-        final Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-
-        //load initial date set to today
-        updateDate(year, month, day);
-
-        Button ChangeDate = (Button)findViewById(R.id.pickDate);
-        ChangeDate.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                //create new date picker dialog and show it
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(), "datePicker");
-
-            }
-        });
-
-        Button Submit = (Button)findViewById(R.id.disposeSubmit);
-        Submit.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager fm = getFragmentManager();
-                myInstance = new MySpinnerDialog();
-                Bundle args = new Bundle();
-                args.putString("title", "Disposing...");
-                myInstance.setArguments(args);
-                myInstance.show(fm, "update_dialog");
-                Properties.setPage("disposeAndroid.php");
-                new DisposeEquipment().execute(Properties.getURL(),Tag.getText().toString(),DateDisplay.getText().toString(),DisposeInfo.getText().toString());
-
-            }
-        });
-
-        getSupportActionBar().setTitle("Dispose Equipment");
-
-        //setHasOptionsMenu(true);
     }
 
     private void setToolBar() {
@@ -266,77 +209,18 @@ public class DisposeActivity extends AppCompatActivity {
         return false;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        getSupportActionBar().setTitle("Dispose Equipment");
-    }
-
-    //update the text field with the new formatted date
-    public static void updateDate(int Year, int Month, int Day) {
-        GregorianCalendar c = new GregorianCalendar(Year, Month, Day);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.US);
-
-        DateDisplay.setText(sdf.format(c.getTime()));
-    }
-
-    //shows dialog with a date picker
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            updateDate(year,month,day);
-        }
-    }
-
-    @SuppressLint("ValidFragment")
-    public class MySpinnerDialog extends DialogFragment {
-
-        public MySpinnerDialog() {
-            // use empty constructors. If something is needed use onCreate's
-        }
-
-        @Override
-        public Dialog onCreateDialog(final Bundle savedInstanceState) {
-
-            ProgressDialog _dialog = new ProgressDialog(getActivity());
-            this.setStyle(STYLE_NO_TITLE, getTheme()); // You can use styles or inflate a view
-            _dialog.setMessage(getArguments().getString("title")); // set your messages if not inflated from XML
-            _dialog.setIndeterminate(true);
-
-            _dialog.setCancelable(false);
-
-            return _dialog;
-        }
-    }
-
-    protected class DisposeEquipment extends AsyncTask<String, Integer, Toast> {
-
-        protected void onPreExecute(){
+    protected class getReqStatus extends AsyncTask<String, Integer, Toast> {
+        protected void onPreExecute() {
             super.onPreExecute();
+            results.clear();
         }
 
         protected Toast doInBackground(String... vars){
-
             OkHttpClient httpClient = new OkHttpClient();
 
             RequestBody formBody = new FormBody.Builder()
-                    .add("tag", vars[1])
-                    .add("dispose", vars[2])
-                    .add("info", vars[3])
+                    .add("reqLevel", Properties.getReqLevel())
+                    .add("username", Properties.getUsername())
                     .build();
 
             Request request = new Request.Builder()
@@ -351,27 +235,32 @@ public class DisposeActivity extends AppCompatActivity {
 
                 if (code == 200) {
                     try{
+                        //get the response body string which is a JSONObject
                         JSONObject responseInfo = new JSONObject(response.body().string());
-                        JSONObject responseAssets = responseInfo.getJSONArray("response").getJSONObject(0);
 
-                        UpdateResults = responseAssets.getString("dispose_response");
+                        //get the array assets and store it
+                        JSONArray responseAssets = responseInfo.getJSONArray("assets");
 
-                    } catch(JSONException je){
+                        //go through the array and do something with the assets individually
+                        for(int i=0;i<responseAssets.length();i++){
+                            JSONObject assetObject = responseAssets.getJSONObject(i);
+                            String List = "Req#: " + assetObject.getInt("id") + "\r\n" + "PO: " + assetObject.getString("po") + "\r\n" +  "Date: " + assetObject.getString("date") + "\r\n" + "Vendor: " + assetObject.getString("vendor") + "\r\n" + "Status: " + assetObject.getString("status");
+                            results.add(List);
+                        }
+                    } catch(JSONException je) {
                         je.printStackTrace();
                     }
                 }
             } catch (IOException e){
                 e.printStackTrace();
             }
-
             return null;
         }
 
         protected void onPostExecute(Toast result){
-
-            myInstance.dismiss();
-            Toast.makeText(mContext, UpdateResults, Toast.LENGTH_LONG).show();
-
+            adapter = new ArrayAdapter<String>(ReqStatusActivity.this, android.R.layout.simple_list_item_1, results);
+            reqList.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
     }
 }

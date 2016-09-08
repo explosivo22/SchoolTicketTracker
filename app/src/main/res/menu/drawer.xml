@@ -20,6 +20,12 @@
             android:checked="false"
             android:icon="@drawable/ic_assignment_black_48dp"
             android:title="@string/inventory" />
+
+        <item
+            android:id="@+id/reqStatus"
+            android:checked="false"
+            android:icon="@drawable/ic_poll_black_48dp"
+            android:title="@string/req_status_title" />
     </group>
     <group
         android:id="@+id/group_settings"

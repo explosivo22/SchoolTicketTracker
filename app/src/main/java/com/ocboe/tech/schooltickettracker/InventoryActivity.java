@@ -125,6 +125,10 @@ public class InventoryActivity extends AppCompatActivity {
                         Intent SettingsActivity = new Intent(mContext, SettingsActivity.class);
                         startActivity(SettingsActivity);
                         return true;
+                    case R.id.reqStatus:
+                        Intent ReqStatusActivity = new Intent(mContext, ReqStatusActivity.class);
+                        startActivity(ReqStatusActivity);
+                        return true;
                     case R.id.openSource:
                         new LibsBuilder()
                                 .withFields(R.string.class.getFields())

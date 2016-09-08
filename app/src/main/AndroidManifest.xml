@@ -38,7 +38,13 @@
         <activity android:name=".InventoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+        <activity android:name=".ReqStatusActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
         <service android:name=".updater.DownloadUpdateService"
+            android:exported="false" />
+
+        <service android:name=".DownloadReqPDFService"
             android:exported="false" />
     </application>
 

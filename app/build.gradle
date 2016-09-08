@@ -9,8 +9,8 @@ android {
         applicationId "com.ocboe.tech.schooltickettracker"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 25
-        versionName "0.9.9"
+        versionCode 26
+        versionName "0.10.0"
 
         multiDexEnabled true
     }

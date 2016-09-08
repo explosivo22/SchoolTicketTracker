@@ -71,4 +71,6 @@
     <string name="up_to_date">Your app is up-to-date</string>
     <string name="open_source_setting_title">Open source licenses</string>
     <string name="app_license_description">Small app that incorporates into the ticket website allowing users to track tickets, dispose equipment, and view inventory.</string>
+    <string name="download_pdf">Download PDF</string>
+    <string name="req_status_title">REQ Status</string>
 </resources>
