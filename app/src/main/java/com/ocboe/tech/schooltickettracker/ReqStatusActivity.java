@@ -29,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -42,7 +43,8 @@ import okhttp3.Response;
 public class ReqStatusActivity extends AppCompatActivity {
 
     private ArrayList<String> results = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private List<ReqStatus> mReqStatusList = new ArrayList<>();
+    private ReqStatusListAdapter adapter;
     private static final String TAG = ReqStatusActivity.class.getSimpleName();
     protected Context mContext;
     private Toolbar tb;
@@ -66,8 +68,7 @@ public class ReqStatusActivity extends AppCompatActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String reqNumber = (String)parent.getItemAtPosition(position);
-                reqNumber = reqNumber.substring(6,reqNumber.indexOf("P")-1);
+                String reqNumber = view.getTag().toString();;
                 Properties.setPage("viewPDF.php?id=");
                 Intent startDownloadIntent = new Intent(ReqStatusActivity.this,DownloadReqPDFService.class);
                 startDownloadIntent.putExtra("downloadURL", Properties.getURL() + reqNumber);
@@ -244,8 +245,9 @@ public class ReqStatusActivity extends AppCompatActivity {
                         //go through the array and do something with the assets individually
                         for(int i=0;i<responseAssets.length();i++){
                             JSONObject assetObject = responseAssets.getJSONObject(i);
-                            String List = "Req#: " + assetObject.getInt("id") + "\r\n" + "PO: " + assetObject.getString("po") + "\r\n" +  "Date: " + assetObject.getString("date") + "\r\n" + "Vendor: " + assetObject.getString("vendor") + "\r\n" + "Status: " + assetObject.getString("status");
-                            results.add(List);
+                            //String List = "Req#: " + assetObject.getInt("id") + "\r\n" + "PO: " + assetObject.getString("po") + "\r\n" +  "Date: " + assetObject.getString("date") + "\r\n" + "Vendor: " + assetObject.getString("vendor") + "\r\n" + "Status: " + assetObject.getString("status");
+                            //results.add(List);
+                            mReqStatusList.add(new ReqStatus(assetObject.getInt("id"),assetObject.getString("po"),assetObject.getString("date"),assetObject.getString("vendor"),assetObject.getString("status")));
                         }
                     } catch(JSONException je) {
                         je.printStackTrace();
@@ -258,7 +260,8 @@ public class ReqStatusActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Toast result){
-            adapter = new ArrayAdapter<String>(ReqStatusActivity.this, android.R.layout.simple_list_item_1, results);
+            //adapter = new ArrayAdapter<String>(ReqStatusActivity.this, android.R.layout.simple_list_item_1, results);
+            adapter = new ReqStatusListAdapter(getApplicationContext(), mReqStatusList);
             reqList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }

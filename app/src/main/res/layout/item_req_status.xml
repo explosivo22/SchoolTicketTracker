@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/req_number"
+        android:text="Number"
+        android:textSize="15dp"
+        android:textColor="#424242"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/req_po"
+        android:text="PO"
+        android:textSize="15dp"
+        android:textColor="#424242"
+        android:layout_below="@+id/req_number"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/req_date"
+        android:text="Date"
+        android:textSize="15dp"
+        android:textColor="#424242"
+        android:layout_toRightOf="@+id/req_number"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/req_vendor"
+        android:text="Vendor"
+        android:textSize="15dp"
+        android:textColor="#424242"
+        android:layout_below="@+id/req_date"
+        android:layout_toRightOf="@+id/req_number"
+        android:layout_margin="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/req_status"
+        android:text="Status"
+        android:textSize="15dp"
+        android:textColor="#039BE5"
+        android:layout_below="@+id/req_vendor"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"/>
+
+</RelativeLayout>
