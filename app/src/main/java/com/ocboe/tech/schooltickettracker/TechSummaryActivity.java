@@ -173,7 +173,6 @@ public class TechSummaryActivity extends ActionBarActivity {
 	}
 
 	private void SetHeader() {
-
 		header_user_name.setText(Properties.getName());
 		header_email.setText(Properties.getEmail());
 	}

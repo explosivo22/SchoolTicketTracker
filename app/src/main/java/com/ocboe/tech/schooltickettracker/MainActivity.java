@@ -317,13 +317,12 @@ public class MainActivity extends AppCompatActivity {
                         //get the response body string which is a JSONObject
                         JSONObject responseInfo = new JSONObject(response.body().string());
 
-                        //get the assets from the login
-                        JSONObject responseAssets = responseInfo.getJSONArray("assets").getJSONObject(0);
-
                         //test the response to see what the login result was
                         switch (responseInfo.getInt("id")) {
                             //successful login.  store the session results
                             case 0:
+                                //get the assets from the login
+                                JSONObject responseAssets = responseInfo.getJSONArray("assets").getJSONObject(0);
                                 StoreSession(responseAssets.getString("session_username"),
                                         responseAssets.getString("session_name"),
                                         responseAssets.getString("session_email"),
@@ -337,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
                             //there was a problem.  return the message to the user
                             case 1:
                                 LoginState = false;
-                                msg = responseAssets.getString("response");
+                                msg = responseInfo.getString("response");
                                 break;
                             //default case that it didn't work
                             default:

@@ -15,7 +15,7 @@ public class Properties {
 	private static String reqLevel;
 	private static String school;
 	private static String room;
-	
+
 	/**
 	 * @param ipAddress The IP Address to the server
 	 */
