@@ -137,6 +137,7 @@ public class ReqStatusActivity extends AppCompatActivity {
                         return true;
                     case R.id.reqStatus:
                         Intent ReqStatusActivity = new Intent(mContext, ReqStatusActivity.class);
+                        ReqStatusActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(ReqStatusActivity);
                         return true;
                     case R.id.openSource:

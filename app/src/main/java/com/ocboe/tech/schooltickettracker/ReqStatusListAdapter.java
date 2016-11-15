@@ -50,7 +50,13 @@ public class ReqStatusListAdapter extends BaseAdapter {
 
         //set text for TextView
         req_Number.setText("REQ#: " + String.valueOf(mReqStatusList.get(position).getReqNumber()));
-        req_PO.setText("PO#: " + mReqStatusList.get(position).getReqPO());
+        String PO;
+        if (mReqStatusList.get(position).getReqPO().isEmpty()) {
+            PO = new String();
+        } else {
+            PO = mReqStatusList.get(position).getReqPO();
+        }
+        req_PO.setText("PO#: " + PO);
         req_Date.setText("Date: " + mReqStatusList.get(position).getReqDate());
         req_Vendor.setText("Vendor: " + mReqStatusList.get(position).getReqVendor());
         switch (mReqStatusList.get(position).getReqStatus()){
