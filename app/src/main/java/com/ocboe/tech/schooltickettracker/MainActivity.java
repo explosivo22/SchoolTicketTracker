@@ -367,7 +367,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void CheckWifi(){
-        wifiManager = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         wifiInfo = wifiManager.getConnectionInfo();
 
         if(wifiInfo.getSSID().contains("OCS")) {

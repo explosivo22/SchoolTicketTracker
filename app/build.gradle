@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         resValue "string", "app_name", "School Ticket Tracker"
@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 28
-        versionName "0.10.2"
+        versionName "0.10.3"
 
         multiDexEnabled true
     }

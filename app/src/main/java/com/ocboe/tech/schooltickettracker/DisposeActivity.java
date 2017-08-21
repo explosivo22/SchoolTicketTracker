@@ -372,7 +372,7 @@ public class DisposeActivity extends AppCompatActivity {
 
             myInstance.dismiss();
             Toast.makeText(mContext, UpdateResults, Toast.LENGTH_LONG).show();
-
+            Tag.setText("");
         }
     }
 }
