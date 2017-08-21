@@ -1,6 +1,5 @@
 package com.ocboe.tech.schooltickettracker;
 
-import android.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +13,9 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.aboutlibraries.LibsFragmentCompat;
-import com.mikepenz.aboutlibraries.ui.LibsFragment;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdate;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdateUtil;
 
@@ -43,6 +40,16 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onDestroy() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(showUpdateDialog);
         super.onDestroy();
@@ -56,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
                 AlertDialog updateDialog = AppUpdateUtil.getAppUpdateDialog(mContext, update);
                 updateDialog.show();
             } else if (update.getStatus() == AppUpdate.UP_TO_DATE)
-                Snackbar.make(getWindow().getDecorView().getRootView(),
+                Snackbar.make(getCurrentFocus(),
                         getResources().getString(R.string.up_to_date), Snackbar.LENGTH_SHORT).show();
             else
                 Toast.makeText(mContext, getResources().getString(R.string.update_check_failed), Toast.LENGTH_SHORT)

@@ -141,6 +141,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 						Intent ReqStatusActivity = new Intent(mContext, ReqStatusActivity.class);
 						ReqStatusActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(ReqStatusActivity);
+						finish();
 						return true;
 					case R.id.openSource:
 						new LibsBuilder()
