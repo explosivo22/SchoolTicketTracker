@@ -41,15 +41,7 @@ import org.w3c.dom.Text;
 
 public class TechSummaryActivity extends ActionBarActivity {
 
-	private String[] mDrawerItems;
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
-	private ActionBarDrawerToggle mDrawerToggle;
-	private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
-	public static Context mContext;
-	public static View mView;
-	private NavigationView navigationView;
+	public  Context mContext;
 	private DrawerLayout drawerLayout;
 	private Toolbar tb;
 	private FragmentManager fm;
@@ -61,14 +53,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 
 		super.onCreate(savedInstanceState);
 		mContext = this;
-		mView = findViewById(android.R.id.content);
-		/*Fragment mFragment = new TechSummaryFragment();
-		
-		FragmentManager fm = getFragmentManager();
-		FragmentTransaction ft = fm.beginTransaction();
-		
-		ft.add(R.id.summaryListContainer, mFragment);
-		ft.commit();*/
+
 		SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
@@ -79,7 +64,7 @@ public class TechSummaryActivity extends ActionBarActivity {
 		setToolBar();
 		setUpNavDrawer();
 
-		navigationView = (NavigationView) findViewById(R.id.navigation);
+		NavigationView navigationView = (NavigationView) findViewById(R.id.navigation);
 
 		View header = navigationView.getHeaderView(0);
 		header_user_name = (TextView)header.findViewById(R.id.header_username);
@@ -198,7 +183,9 @@ public class TechSummaryActivity extends ActionBarActivity {
 		tb = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(tb);
 		ActionBar ab = getSupportActionBar();
-		ab.setHomeAsUpIndicator(R.drawable.icon);
+		if (ab != null) {
+			ab.setHomeAsUpIndicator(R.drawable.icon);
+		}
 		//ab.setDisplayHomeAsUpEnabled(true);
 	}
 
