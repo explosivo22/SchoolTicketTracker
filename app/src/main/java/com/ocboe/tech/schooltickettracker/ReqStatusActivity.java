@@ -212,7 +212,7 @@ public class ReqStatusActivity extends AppCompatActivity {
         return false;
     }
 
-    protected class getReqStatus extends AsyncTask<String, Integer, Toast> {
+    private class getReqStatus extends AsyncTask<String, Integer, Toast> {
         protected void onPreExecute() {
             super.onPreExecute();
             results.clear();

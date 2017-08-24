@@ -1,5 +1,7 @@
 package com.ocboe.tech.schooltickettracker;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ public class InventoryFragment extends Fragment{
     private Spinner SchoolSpinner;
     private Spinner RoomSpinner;
     private Spinner UserSpinner;
+    private Button  SearchButton;
     private boolean inhibit = true;
     private boolean inhibitUser = true;
     private boolean inhibitRoom = true;
@@ -53,6 +57,7 @@ public class InventoryFragment extends Fragment{
         SchoolSpinner = (Spinner)view.findViewById(R.id.schoolSpinner);
         RoomSpinner = (Spinner)view.findViewById(R.id.roomSpinner);
         UserSpinner = (Spinner)view.findViewById(R.id.userSpinner);
+        SearchButton = (Button)view.findViewById(R.id.inventorySubmit);
 
         RoomSpinner.setVisibility(View.GONE);
         UserSpinner.setVisibility(View.GONE);
@@ -105,6 +110,23 @@ public class InventoryFragment extends Fragment{
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
                 //nothing
+            }
+        });
+
+        SearchButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Fragment showFragment = new ShowInventoryFragment();
+                Bundle mBundle = new Bundle();
+                String school = SchoolSpinner.getSelectedItem().toString();
+                mBundle.putString("school", school);
+                showFragment.setArguments(mBundle);
+                FragmentManager fm = getFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+
+                ft.replace(R.id.summaryListContainer, showFragment);
+                ft.addToBackStack(null);
+                ft.commit();
             }
         });
 
