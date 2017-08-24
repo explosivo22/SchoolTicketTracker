@@ -118,8 +118,9 @@ public class InventoryFragment extends Fragment{
             public void onClick(View v){
                 Fragment showFragment = new ShowInventoryFragment();
                 Bundle mBundle = new Bundle();
-                String school = SchoolSpinner.getSelectedItem().toString();
-                mBundle.putString("school", school);
+                mBundle.putString("school", SchoolSpinner.getSelectedItem().toString());
+                mBundle.putString("user", UserSpinner.getSelectedItem().toString());
+                mBundle.putString("room", RoomSpinner.getSelectedItem().toString());
                 showFragment.setArguments(mBundle);
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
