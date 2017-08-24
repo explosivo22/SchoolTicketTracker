@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -33,11 +35,16 @@ import okhttp3.Response;
 public class ShowInventoryFragment extends ListFragment {
 
     private ArrayList<String> results = new ArrayList<>();
-    private ArrayAdapter<String> adapter;
+    private List<Inventory> mInventoryList = new ArrayList<>();
+    private InventoryListAdapter adapter;
+    private ListView inventoryList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.show_inventory_fragment, container, false);
         Properties.setPage("viewInventoryAndroid.php");
+
+        inventoryList = (ListView)view.findViewById(android.R.id.list);
 
         Bundle bundle = this.getArguments();
         String school = bundle.getString("school");
@@ -48,7 +55,7 @@ public class ShowInventoryFragment extends ListFragment {
 
         setHasOptionsMenu(true);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return view;
     }
 
     @Override
@@ -119,8 +126,8 @@ public class ShowInventoryFragment extends ListFragment {
                             JSONObject assetObject = responseAssets.getJSONObject(i);
                             //String List = "Req#: " + assetObject.getInt("id") + "\r\n" + "PO: " + assetObject.getString("po") + "\r\n" +  "Date: " + assetObject.getString("date") + "\r\n" + "Vendor: " + assetObject.getString("vendor") + "\r\n" + "Status: " + assetObject.getString("status");
                             //results.add(List);
-                            String inventory = assetObject.getString("tag") + "\r\n"  + assetObject.getString("type") + "\r\n"  + assetObject.getString("brand") + "\r\n"  + assetObject.getString("model") + "\r\n"  + assetObject.getString("serial");
-                            results.add(inventory);
+                            //String inventory = assetObject.getString("tag") + "\r\n"  + assetObject.getString("type") + "\r\n"  + assetObject.getString("brand") + "\r\n"  + assetObject.getString("model") + "\r\n"  + assetObject.getString("serial");
+                            mInventoryList.add(new Inventory(assetObject.getString("tag"),assetObject.getString("type"),assetObject.getString("brand"),assetObject.getString("model"),assetObject.getString("serial")));
                         }
                     } catch(JSONException je) {
                         je.printStackTrace();
@@ -134,8 +141,8 @@ public class ShowInventoryFragment extends ListFragment {
 
         protected void onPostExecute(Toast result){
             //adapter = new ArrayAdapter<String>(ReqStatusActivity.this, android.R.layout.simple_list_item_1, results);
-            adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, results);
-            setListAdapter(adapter);
+            adapter = new InventoryListAdapter(getActivity(), mInventoryList);
+            inventoryList.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }
     }

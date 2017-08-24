@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -116,18 +117,23 @@ public class InventoryFragment extends Fragment{
         SearchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Fragment showFragment = new ShowInventoryFragment();
-                Bundle mBundle = new Bundle();
-                mBundle.putString("school", SchoolSpinner.getSelectedItem().toString());
-                mBundle.putString("user", UserSpinner.getSelectedItem().toString());
-                mBundle.putString("room", RoomSpinner.getSelectedItem().toString());
-                showFragment.setArguments(mBundle);
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
+                if((RoomSpinner.getVisibility() == View.VISIBLE) && (UserSpinner.getVisibility() == View.VISIBLE)){
+                    Fragment showFragment = new ShowInventoryFragment();
+                    Bundle mBundle = new Bundle();
+                    mBundle.putString("school", SchoolSpinner.getSelectedItem().toString());
+                    mBundle.putString("user", UserSpinner.getSelectedItem().toString());
+                    mBundle.putString("room", RoomSpinner.getSelectedItem().toString());
+                    showFragment.setArguments(mBundle);
+                    FragmentManager fm = getFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
 
-                ft.replace(R.id.summaryListContainer, showFragment);
-                ft.addToBackStack(null);
-                ft.commit();
+                    ft.replace(R.id.summaryListContainer, showFragment);
+                    ft.addToBackStack(null);
+                    ft.commit();
+                } else {
+                    Snackbar.make(getView(),
+                            getResources().getString(R.string.inventory_button_nothing_selected), Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
 

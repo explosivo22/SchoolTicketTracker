@@ -9,8 +9,8 @@ android {
         applicationId "com.ocboe.tech.schooltickettracker"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 31
-        versionName "0.10.5"
+        versionCode 35
+        versionName "0.10.9"
 
         multiDexEnabled true
     }
@@ -43,7 +43,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:design:23.2.1'
 
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile('com.mikepenz:aboutlibraries:5.9.0@aar') {
         transitive = true

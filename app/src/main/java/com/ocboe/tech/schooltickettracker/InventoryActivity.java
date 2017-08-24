@@ -187,6 +187,21 @@ public class InventoryActivity extends AppCompatActivity {
         }
     }
 
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getFragmentManager();
+        if(fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStack();
+            InventoryFragment inventoryFrag = (InventoryFragment)getFragmentManager().findFragmentByTag("InventoryFragment");
+            if (inventoryFrag != null && inventoryFrag.isVisible()) { //If we are in fragment A when we press the back button, finish is called to exit
+                finish();
+            } else {
+                //displayView(0); //else, switch to fragment A
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
