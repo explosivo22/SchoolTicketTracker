@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inventory_tag"
         android:text="Tag"
+        android:textColor="#424242"
         android:textSize="15dp"
         android:layout_margin="5dp"/>
 
@@ -16,6 +17,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inventory_type"
         android:text="Type"
+        android:textColor="#424242"
         android:textSize="15dp"
         android:layout_margin="5dp"
         android:layout_below="@+id/inventory_tag"/>
@@ -25,6 +27,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inventory_brand"
         android:text="Brand"
+        android:textColor="#424242"
         android:textSize="15dp"
         android:layout_margin="5dp"
         android:layout_below="@+id/inventory_type"/>
@@ -34,6 +37,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inventory_model"
         android:text="Model"
+        android:textColor="#424242"
         android:textSize="15dp"
         android:layout_margin="5dp"
         android:layout_below="@+id/inventory_brand"/>
@@ -43,6 +47,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/inventory_serial"
         android:text="Serial"
+        android:textColor="#424242"
         android:textSize="15dp"
         android:layout_margin="5dp"
         android:layout_below="@+id/inventory_model"/>
