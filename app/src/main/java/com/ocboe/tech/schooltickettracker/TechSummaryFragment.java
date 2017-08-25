@@ -27,6 +27,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
+
 public class TechSummaryFragment  extends ListFragment {
 	
 	private ArrayList<String> results = new ArrayList<> ();
@@ -37,7 +40,7 @@ public class TechSummaryFragment  extends ListFragment {
 	private String[] techresults;
 	
 	private Fragment mFragment;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		

@@ -33,6 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.LibsBuilder;
+import com.mikepenz.foundation_icons_typeface_library.FoundationIcons;
+import com.mikepenz.iconics.Iconics;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.ionicons_typeface_library.Ionicons;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdate;
 import com.ocboe.tech.schooltickettracker.updater.AppUpdateUtil;
 import com.ocboe.tech.schooltickettracker.updater.DownloadUpdateService;
@@ -71,6 +75,18 @@ public class TechSummaryActivity extends ActionBarActivity {
 		header_email = (TextView)header.findViewById(R.id.header_email);
 
 		SetHeader();
+
+		Menu menuNav = navigationView.getMenu();
+		MenuItem menuItem = menuNav.findItem(R.id.techsummary);
+		menuItem.setIcon(new IconicsDrawable(this).icon(Ionicons.Icon.ion_android_list));
+		menuItem = menuNav.findItem(R.id.dispose);
+		menuItem.setIcon(new IconicsDrawable(this).icon(Ionicons.Icon.ion_trash_a));
+		menuItem = menuNav.findItem(R.id.inventory);
+		menuItem.setIcon(new IconicsDrawable(this).icon(Ionicons.Icon.ion_clipboard));
+		menuItem = menuNav.findItem(R.id.reqStatus);
+		menuItem.setIcon(new IconicsDrawable(this).icon(Ionicons.Icon.ion_document_text));
+		menuItem = menuNav.findItem(R.id.settings);
+		menuItem.setIcon(new IconicsDrawable(this).icon(Ionicons.Icon.ion_settings));
 
 
 		//Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
