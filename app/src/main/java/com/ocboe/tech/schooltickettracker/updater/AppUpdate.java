@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-@AllArgsConstructor(suppressConstructorProperties = true)
+@AllArgsConstructor()
 @Getter
 @Setter
 public class AppUpdate implements Parcelable {

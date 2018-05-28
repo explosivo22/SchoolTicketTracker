@@ -62,7 +62,7 @@ public class Properties {
 	 * @return URL
 	 */
 	public static String getURL() {
-		return "http://" + Properties.ipAddress + ":" + Properties.port + "/" + Properties.page;
+		return "https://" + Properties.ipAddress + "/" + Properties.page;
 	}
 	
 	/**
