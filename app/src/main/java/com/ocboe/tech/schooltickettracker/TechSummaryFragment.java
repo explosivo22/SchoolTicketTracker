@@ -30,6 +30,9 @@ import android.widget.Toast;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.ionicons_typeface_library.Ionicons;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
 public class TechSummaryFragment  extends ListFragment {
 	
 	private ArrayList<String> results = new ArrayList<> ();
@@ -135,7 +138,13 @@ public class TechSummaryFragment  extends ListFragment {
 				//String urlParameters = "username=" + vars[1] + "&password=" + vars[2];
 				//byte[] postData = urlParameters.getBytes( StandardCharsets.UTF_8 );
 				//int postDataLength = postData.length;
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+				// Create the SSL connection
+				SSLContext sc;
+				sc = SSLContext.getInstance("TLS");
+				sc.init(null, null, new java.security.SecureRandom());
+				conn.setSSLSocketFactory(sc.getSocketFactory());
+
 				conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 				conn.setRequestMethod("POST");
 				//conn.setRequestProperty("User-Agent", USER_AGENT);

@@ -2,28 +2,31 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '26.0.1'
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         resValue "string", "app_name", "School Ticket Tracker"
         applicationId "com.ocboe.tech.schooltickettracker"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 36
-        versionName "0.11.0"
+        versionCode 37
+        versionName "0.12.0"
 
         multiDexEnabled true
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         offline {
-            applicationId "com.ocboe.tech.schooltickettracker.nointernet"
+            dimension 'default'
+            applicationIdSuffix ".offline"
             buildConfigField "boolean", "isInternetAvailable", "false"
             resValue "string", "app_name", "School Ticket Tracker Offline"
         }
 
         online {
-            applicationId "com.ocboe.tech.schooltickettracker"
+            dimension 'default'
             buildConfigField "boolean", "isInternetAvailable", "true"
             resValue "string", "app_name", "School Ticket Tracker"
         }
@@ -43,7 +46,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:design:23.2.1'
 
-    compile 'com.squareup.okhttp3:okhttp:3.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile "com.mikepenz:iconics-core:2.9.1@aar"
     compile 'com.mikepenz:foundation-icons-typeface:3.0.0.3@aar'
     compile 'com.mikepenz:ionicons-typeface:2.0.1.3@aar'
@@ -52,5 +55,6 @@ dependencies {
         transitive = true
     }
 
-    provided "org.projectlombok:lombok:1.12.6"
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
+    compileOnly "org.projectlombok:lombok:1.16.20"
 }

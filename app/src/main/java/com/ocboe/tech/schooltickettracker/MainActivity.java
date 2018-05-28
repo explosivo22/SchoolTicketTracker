@@ -55,6 +55,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 
+import javax.net.ssl.SSLContext;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -205,10 +207,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
+        adjusting to FQDN with HTTPS
         CheckWifi();
-
         Properties.setPort(4001);
+         */
 
+        DisplayIP.setText("Using FQDN");
+        Properties.setIPAddress("tech.ocboe.com");
         Properties.setPage("logonandroid.php");
 
         //setHasOptionsMenu(true);
@@ -275,10 +281,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        wifiInfo = wifiManager.getConnectionInfo();
+        //wifiInfo = wifiManager.getConnectionInfo();
         getSupportActionBar().setTitle("Login");
         Properties.setPage("logonandroid.php");
-        CheckWifi();
+        //CheckWifi();
     }
 
     private class Login extends AsyncTask<String, Integer, Toast> {
@@ -372,11 +378,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(wifiInfo.getSSID().contains("OCS")) {
             Log.d(TAG, "CheckWifi: Connected to Internal Network");
-            Properties.setIPAddress("10.99.0.26");
+            Properties.setIPAddress("tech.ocboe.com");
             DisplayIP.setText("IP: Internal");
         }else{
             Log.d(TAG, "CheckWifi: Connected to External Network");
-            Properties.setIPAddress("96.4.160.69");
+            Properties.setIPAddress("tech.ocboe.com");
             DisplayIP.setText("IP: External");
         }
     }
